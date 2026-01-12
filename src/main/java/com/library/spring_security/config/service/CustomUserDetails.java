@@ -1,34 +1,52 @@
 package com.library.spring_security.config.service;
 
 import com.library.spring_security.domain.model.User;
-import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
-import java.util.List;
 
-@RequiredArgsConstructor
+
 public class CustomUserDetails implements UserDetails {
 
-    private final User user;
+    private final String email;
+    private final String password;
+    private final Collection<? extends GrantedAuthority> authorities;
+
+    private CustomUserDetails(
+                              String email,
+                              String password,
+                              boolean enabled,
+                              Collection<? extends GrantedAuthority> authorities) {
+        this.email = email;
+        this.password = password;
+        this.authorities = authorities;
+    }
+    public static CustomUserDetails from(User user){
+        return new CustomUserDetails(
+                user.getEmail(),
+                user.getPassword(),
+                user.isEnabled(),
+                user.getRoles()
+                        .stream()
+                        .map(role -> new  SimpleGrantedAuthority("ROLE_" + role.getName()))
+                        .toList()
+        );
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return user.getRoles()
-                .stream()
-                .map(role -> new SimpleGrantedAuthority(role.getName()))
-                .toList();
+        return authorities;
     }
 
     @Override
     public String getPassword() {
-        return user.getPassword();
+        return password;
     }
 
     @Override
     public String getUsername() {
-        return user.getEmail();
+        return email;
     }
 
     @Override
@@ -48,6 +66,6 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return user.isEnabled();
+        return true;
     }
 }

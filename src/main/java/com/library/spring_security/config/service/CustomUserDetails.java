@@ -1,16 +1,18 @@
 package com.library.spring_security.config.service;
 
 import com.library.spring_security.domain.model.User;
+import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 
-
+@Getter
 public class CustomUserDetails implements UserDetails {
 
     private final String email;
     private final String password;
+    private final boolean enableds;
     private final Collection<? extends GrantedAuthority> authorities;
 
     private CustomUserDetails(
@@ -20,6 +22,7 @@ public class CustomUserDetails implements UserDetails {
                               Collection<? extends GrantedAuthority> authorities) {
         this.email = email;
         this.password = password;
+        this.enableds = enabled;
         this.authorities = authorities;
     }
     public static CustomUserDetails from(User user){
@@ -66,6 +69,6 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return isEnableds();
     }
 }

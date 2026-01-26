@@ -38,6 +38,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<APIResponse<?>> handleException(Exception ex){
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(APIResponse.error("Something Wrong!",HttpStatus.INTERNAL_SERVER_ERROR));
+                .body(APIResponse.error(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR));
     }
 }

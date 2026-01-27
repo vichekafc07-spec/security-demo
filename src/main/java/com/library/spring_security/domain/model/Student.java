@@ -14,8 +14,14 @@ public class Student {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String name;
-    private String gender;
     private String skill;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "register_id")
+    private Register register;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "classroom_id")
+    private Classroom classroom;
 
 }

@@ -1,6 +1,7 @@
 package com.library.spring_security.controller;
 
 import com.library.spring_security.domain.dto.request.SignUpDto;
+import com.library.spring_security.exceptions.APIResponse;
 import com.library.spring_security.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -18,10 +19,9 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/signup")
-    public ResponseEntity<?> register(@Valid @RequestBody SignUpDto dto){
-        authService.register(dto);
-        return ResponseEntity.status(HttpStatus.OK)
-                .body("User register successfully");
+    public ResponseEntity<APIResponse<SignUpDto>> register(@Valid @RequestBody SignUpDto dto){
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(APIResponse.create(authService.register(dto),"User signup successfully !"));
     }
 
 }

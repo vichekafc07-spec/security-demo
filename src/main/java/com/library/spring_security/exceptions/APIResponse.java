@@ -1,17 +1,27 @@
 package com.library.spring_security.exceptions;
 
+import lombok.Builder;
 import lombok.Data;
 import org.springframework.http.HttpStatus;
 
 import java.time.LocalDateTime;
 
 @Data
+@Builder
 public class APIResponse<T> {
     private Boolean success;
     private Integer code;
     private String message;
     private T data;
     private LocalDateTime timestamp;
+
+    public APIResponse(Boolean success, Integer code, String message, T data, LocalDateTime timestamp) {
+        this.success = success;
+        this.code = code;
+        this.message = message;
+        this.data = data;
+        this.timestamp = timestamp;
+    }
 
     public APIResponse(Boolean success, Integer code, String message, T data) {
         this.success = success;

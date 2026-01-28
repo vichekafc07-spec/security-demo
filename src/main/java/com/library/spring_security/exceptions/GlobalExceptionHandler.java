@@ -6,6 +6,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -39,5 +40,17 @@ public class GlobalExceptionHandler {
     public ResponseEntity<APIResponse<?>> handleException(Exception ex){
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(APIResponse.error(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR));
+    }
+    @ExceptionHandler(DuplicateResourceException.class)
+    public ResponseEntity<APIResponse<Void>> handleDuplicate(DuplicateResourceException ex) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(
+                APIResponse.<Void>builder()
+                        .success(false)
+                        .code(HttpStatus.CONFLICT.value())
+                        .message(ex.getMessage())
+                        .data(null)
+                        .timestamp(LocalDateTime.now())
+                        .build()
+        );
     }
 }
